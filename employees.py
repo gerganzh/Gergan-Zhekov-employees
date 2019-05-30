@@ -19,11 +19,11 @@ from collections import defaultdict
 from itertools import combinations
 from datetime import datetime
 
-#global variables
+# global variables
 d = defaultdict(list)
 t = defaultdict(list)
 
-list_projects = [] #a list that will keep track of days worked on a project
+list_projects = [] # a list that will keep track of days worked on a project
 
 df = pd.read_csv('data.txt')  # reading the text data file with pandas
 
@@ -37,28 +37,34 @@ df.to_csv('new_data.csv')  # exporting to a new text file
 with open("new_data.csv") as f:
     next(f)  # skip header
     r = csv.reader(f)
-    # unpack, use projectID as key and  append empID, start date, finish date
+    # unpack, use projectID as key and  append empID, start_date, finish_date
     for EmpID, ProjectID, FromDate, ToDate in r:
         d[int(ProjectID)].append((EmpID, FromDate, ToDate))
 
 
-for job, aref in d.items():
+for project, aref in d.items():
+    # finding which projects had two or more employees assigned
     if len(aref) >= 2:
+        #using combinations package to iterate
         for ref in combinations(aref, 2):
-            begin = max(map(lambda x: x[1], ref))
-            end = min(map(lambda x: x[2], ref))
-            delta = datetime.strptime(end, '%Y-%m-%d') \
-                - datetime.strptime(begin, '%Y-%m-%d')
+            #using lambda as a function
+            #mapping start and finish dates with the iterable
+            start_date = max(map(lambda x: x[1], ref))
+            finish_date = min(map(lambda x: x[2], ref))
+            #calculating the days using the datetime package
+            delta = datetime.strptime(finish_date, '%Y-%m-%d') \
+                - datetime.strptime(start_date, '%Y-%m-%d')
             dd = delta.days
             if dd > 0:
                 list_projects.append(dd)
+                #appending to the dictionary for the output
                 t[ref[0][0] + ' and ' + ref[1][0]].append(dd)
 
-                #  print('Employees with EmpID:', ref[0][0], 'and', ref[1][0],
-                # 'worked together on a common project (Project ID:', job, ') \
-                #  for a total of', dd, 'days\n')
+                # print('Employees with EmpID:', ref[0][0], 'and', ref[1][
+                # 0], 'worked together on a common project (Project ID:',
+                # project, ') \ for a total of', dd, 'days\n')
 
 print('The pair that has worked together the longest according to the data' +
       ' file input are employees with ID ' + str(max(t, key = t.get)) + ' with'
-      + ' a working time of ' + str(max(list_projects)) + ' days.')
+      + ' a total working time of ' + str(max(list_projects)) + ' days.')
 

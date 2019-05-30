@@ -60,9 +60,9 @@ for project, aref in d.items():
                 #appending to the dictionary for the output
                 t[ref[0][0] + ' and ' + ref[1][0]].append(dd)
 
-                print('Employees with EmpID:', ref[0][0], 'and', ref[1][
-                0], 'worked together on a common project (Project ID:',
-                project, ')  for a total of', dd, 'days\n')
+                print('Employees with EmpID:', ref[0][0], 'and', ref[1][0],
+                      'worked together on a common project (Project ID:',
+                      project, ') for a total of', dd, 'days\n')
 
 print('The pair that has worked together the longest according to the data' +
       ' file input are employees with ID ' + str(max(t, key = t.get)) + ' with'

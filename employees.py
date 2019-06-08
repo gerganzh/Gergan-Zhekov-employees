@@ -11,9 +11,9 @@ worked as a value. In the final print statement the code will return the
 pair with the max value.
 """
 
-
 import csv
 import pandas as pd
+import operator
 
 from collections import defaultdict
 from itertools import combinations
@@ -29,7 +29,8 @@ df = pd.read_csv('data.txt')  # reading the text data file with pandas
 
 # replacing NULL with the value of today
 df['DateTo'] = df['DateTo'].fillna(datetime.today().strftime('%Y-%m-%d'))
-
+df = df.sort_values(by=['EmpID'])# sorting to EmpID, because it will come to
+#  use later
 df.set_index("EmpID", inplace=True)  # creating EmpID as the index
 df.to_csv('new_data.csv')  # exporting to a new text file
 
@@ -59,12 +60,11 @@ for project, aref in d.items():
                 list_projects.append(dd)
                 #appending to the dictionary for the output
                 t[ref[0][0] + ' and ' + ref[1][0]].append(dd)
+                new_dict = {k: sum(v) for k, v in t.items()}
 
-                print('Employees with EmpID:', ref[0][0], 'and', ref[1][0],
-                      'worked together on a common project (Project ID:',
-                      project, ') for a total of', dd, 'days\n')
 
-print('The pair that has worked together the longest according to the data' +
-      ' file input are employees with ID ' + str(max(t, key = t.get)) + ' with'
-      + ' a total working time of ' + str(max(list_projects)) + ' days.')
+print("Employees that have the longest working time together are employees "
+      "with ID: " +
+      str(max(new_dict.items(), key=operator.itemgetter(1))[0]))
+
 

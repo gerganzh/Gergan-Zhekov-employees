@@ -57,10 +57,14 @@ for project, aref in d.items():
                 # calculating the working times from different projects for all
                 # the different pairs
                 new_dict = {k: sum(v) for k, v in pairs.items()}
+                # finding key with highest value
+                longest_working_pair = max(new_dict.items(),
+                                           key=operator.itemgetter(1))[0]
+                # highest value from the dictionary
+                max_value = max(new_dict.values())
 
-# Finding the key with the max value, and returns it
 print("Employees that have the longest working time together are employees "
-      "with ID: " +
-      str(max(new_dict.items(), key=operator.itemgetter(1))[0]))
+      "with ID: " + str(longest_working_pair) + ". The combined working times"
+      " of them across different projects is " + str(max_value) + " days")
 
 

@@ -51,16 +51,17 @@ for project, aref in d.items():
                 - datetime.strptime(start_date, '%Y-%m-%d')
             dd = delta.days
             if dd > 0:
-                # appending to the dictionary pairs with the working times from
-                # different projects
+                # appending to the dictionary pairs as keys with the working
+                # times from different projects as values
                 pairs[ref[0][0] + ' and ' + ref[1][0]].append(dd)
-                # calculating the working times from different projects for all
-                # the different pairs
+                # adding the working times from different projects for all
+                # the possible pairs
                 new_dict = {k: sum(v) for k, v in pairs.items()}
-                # finding key with highest value
+                # and finding key with highest value
                 longest_working_pair = max(new_dict.items(),
                                            key=operator.itemgetter(1))[0]
-                # highest value from the dictionary
+                # highest value from the dictionary, which is the total days
+                # for a single pair of employees
                 max_value = max(new_dict.values())
 
 print("Employees that have the longest working time together are employees "

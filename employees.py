@@ -1,14 +1,8 @@
-"""Pandas is used to open the data text file and read it as a CSV (a plain
-text format used for data management,which uses comma as a separator between
-the different values). The data is exported to a pandas DataFrame, the dates
-are properly formatted from the reader and the NULL value is automatically
-replace with the current date in the same format. The new table is then
-outputted to a new CSV file, and is opened and read by Python. A defaultdict
-is used instead of a normal dictionary, and ProjectID serves as a key.
-Another empty dictionary is created that is going to be filled with the
-results from the loop and contain a pair of employees as a key, and the days
-worked as a value. In the final print statement the code will return the
-pair with the max value.
+"""This code returns the pair of employees that have the longest common
+working time across different projects. Pandas is used to read the .txt file
+and format it. It is then exported to a .CSV file (which is better for data
+management). After that with the use of default dictionaries the needed data is
+obtained and printed as a result.
 """
 
 import csv
@@ -19,20 +13,20 @@ from collections import defaultdict
 from itertools import combinations
 from datetime import datetime
 
-# global variables
+# global variables, using default dicts rather than normal dictionaries
 d = defaultdict(list)
-t = defaultdict(list)
-
-list_projects = [] # a list that will keep track of days worked on a project
+pairs = defaultdict(list)
 
 df = pd.read_csv('data.txt')  # reading the text data file with pandas
 
 # replacing NULL with the value of today
 df['DateTo'] = df['DateTo'].fillna(datetime.today().strftime('%Y-%m-%d'))
-df = df.sort_values(by=['EmpID'])# sorting to EmpID, because it will come to
-#  use later
+
+# sorting by EmpID, because it will be easier to calculate the output
+df = df.sort_values(by=['EmpID'])
+
 df.set_index("EmpID", inplace=True)  # creating EmpID as the index
-df.to_csv('new_data.csv')  # exporting to a new text file
+df.to_csv('new_data.csv')  # exporting to a new .CSV file
 
 
 with open("new_data.csv") as f:
@@ -57,12 +51,14 @@ for project, aref in d.items():
                 - datetime.strptime(start_date, '%Y-%m-%d')
             dd = delta.days
             if dd > 0:
-                list_projects.append(dd)
-                #appending to the dictionary for the output
-                t[ref[0][0] + ' and ' + ref[1][0]].append(dd)
-                new_dict = {k: sum(v) for k, v in t.items()}
+                # appending to the dictionary pairs with the working times from
+                # different projects
+                pairs[ref[0][0] + ' and ' + ref[1][0]].append(dd)
+                # calculating the working times from different projects for all
+                # the different pairs
+                new_dict = {k: sum(v) for k, v in pairs.items()}
 
-
+# Finding the key with the max value, and returns it
 print("Employees that have the longest working time together are employees "
       "with ID: " +
       str(max(new_dict.items(), key=operator.itemgetter(1))[0]))

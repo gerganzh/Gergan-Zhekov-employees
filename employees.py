@@ -40,13 +40,13 @@ with open("new_data.csv") as f:
 for project, aref in d.items():
     # finding which projects had two or more employees assigned
     if len(aref) >= 2:
-        #using combinations package to iterate
+        # using combinations package to iterate
         for ref in combinations(aref, 2):
-            #using lambda as a function
-            #mapping start and finish dates with the iterable
+            # using lambda as a function
+            # mapping start and finish dates with the iterable
             start_date = max(map(lambda x: x[1], ref))
             finish_date = min(map(lambda x: x[2], ref))
-            #calculating the days using the datetime package
+            # calculating the days using the datetime package
             delta = datetime.strptime(finish_date, '%Y-%m-%d') \
                 - datetime.strptime(start_date, '%Y-%m-%d')
             dd = delta.days

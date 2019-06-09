@@ -38,15 +38,14 @@ with open("new_data.csv") as f:
 
 
 for project, aref in d.items():
-    # finding which projects had two or more employees assigned
+    # only projects with 2 or more assigned employees
     if len(aref) >= 2:
-        # using combinations package to iterate
         for ref in combinations(aref, 2):
-            # using lambda as a function
+            # using lambda operator to create an in-line function
             # mapping start and finish dates with the iterable
             start_date = max(map(lambda x: x[1], ref))
             finish_date = min(map(lambda x: x[2], ref))
-            # calculating the days using the datetime package
+            # finding the duration of a project in days
             delta = datetime.strptime(finish_date, '%Y-%m-%d') \
                 - datetime.strptime(start_date, '%Y-%m-%d')
             dd = delta.days
@@ -65,7 +64,7 @@ for project, aref in d.items():
                 max_value = max(new_dict.values())
 
 print("Employees that have the longest working time together are employees "
-      "with ID: " + str(longest_working_pair) + ". The combined working times"
+      "with ID: " + str(longest_working_pair) + ". The total working time"
       " of them across different projects is " + str(max_value) + " days")
 
 
